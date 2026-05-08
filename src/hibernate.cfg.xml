@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost/voting</property>
+    <property name="hibernate.connection.username">dbase</property>
+    <property name="hibernate.connection.password">root</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="hibernate.format_sql">true</property>
+    <mapping class="com.voting.model.master.Calon"/>
+    <mapping class="com.voting.model.master.Pemilih"/>
+    <mapping class="com.voting.model.master.pemilih.Difabel"/>
+    <mapping class="com.voting.model.master.pemilih.Status"/>
+    <mapping class="com.voting.model.master.Tps"/>
+    <mapping class="com.voting.model.master.tps.Des"/>
+    <mapping class="com.voting.model.master.tps.Kec"/>
+    <mapping class="com.voting.model.master.tps.Kab"/>
+    <mapping class="com.voting.model.master.tps.Prov"/>
+    <mapping class="com.voting.model.transaksi.Bilik"/>
+    <mapping class="com.voting.model.transaksi.Card"/>
+    <mapping class="com.voting.model.transaksi.Tunggu"/>
+    <mapping class="com.voting.model.security.Admin"/>
+    <mapping class="com.voting.model.security.Log"/>
+    <mapping class="com.voting.model.security.admin.Acc"/>
+    <mapping class="com.voting.model.security.admin.Menu"/>
+  </session-factory>
+</hibernate-configuration>
