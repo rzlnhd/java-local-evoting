@@ -1,8 +1,11 @@
 *.class
-*.jar
+# *.jar
 *.war
 *.ear
 
+.env
+
 target/
 build/
+dist/*
 .gradle/
