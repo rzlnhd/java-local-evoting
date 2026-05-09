@@ -130,6 +130,8 @@ On first launch, a dialog lets you choose between `Localhost` (server mode) or e
 ## Project Structure
 
 ```
+databases/
+└── voting.sql     # Database structure and default entries dump
 src/main/java/com/voting/
 ├── dao/           # Data access layer (Hibernate)
 ├── model/         # JPA entities (master, transaksi, security)
