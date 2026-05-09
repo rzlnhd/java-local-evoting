@@ -168,4 +168,4 @@ libs/
 
 ## License
 
-This project was originally developed circa 2018 as a local government tooling project. Under [ISC](LICENSE) License
+This project was originally developed circa 2018 as a local government tooling project. Under [MIT](LICENSE) License
