@@ -11,13 +11,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PanelFoto extends javax.swing.JPanel {
+
     private Image image;
-    
+
     public PanelFoto() {
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
         initComponents();// </editor-fold>
     }
-    public void setImage(Image image){
+
+    public void setImage(Image image) {
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
         this.image = image;
         MediaTracker mediaTracker = new MediaTracker(this);
@@ -29,13 +31,14 @@ public class PanelFoto extends javax.swing.JPanel {
         }
         initComponents();// </editor-fold>
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
         super.paintComponent(g);
-        g.drawImage(image, 0, 0,getWidth(),getHeight(), this);// </editor-fold>
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);// </editor-fold>
     }
-    @SuppressWarnings("unchecked")
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -44,12 +47,12 @@ public class PanelFoto extends javax.swing.JPanel {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 192, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 192, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 260, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 260, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables

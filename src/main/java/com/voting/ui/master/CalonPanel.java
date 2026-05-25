@@ -5,6 +5,15 @@
  */
 package com.voting.ui.master;
 
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.AbstractTableModel;
+
 import com.voting.model.master.Calon;
 import com.voting.service.MasterService;
 import com.voting.service.SecurityService;
@@ -13,19 +22,15 @@ import com.voting.ui.master.dialog.InputCalon;
 import com.voting.ui.master.dialog.ViewCalon;
 import com.voting.util.DataLogger;
 import com.voting.util.UploadImg;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author Rizal
  */
 public class CalonPanel extends javax.swing.JInternalFrame {
-    
+
+    private final ResourceBundle bundle = ResourceBundle.getBundle("com.voting.ui.master.Bundle");
+
     private static List<Calon> calons;
     private Calon calon;
     MasterService ms = MainUi.getMasterService();
@@ -35,13 +40,15 @@ public class CalonPanel extends javax.swing.JInternalFrame {
      * Creates new form CalonPanel
      */
     public CalonPanel() {
-        initComponents();initListener();loadData();
+        initComponents();
+        initListener();
+        loadData();
     }
-    
+
     private void initListener() {
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
         tData.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            if(tData.getSelectedRow()>=0){
+            if (tData.getSelectedRow() >= 0) {
                 int indexModel = tData.convertRowIndexToModel(tData.getSelectedRow());
                 calon = calons.get(indexModel);
                 panelTombol1.Terpilih(true);
@@ -55,11 +62,11 @@ public class CalonPanel extends javax.swing.JInternalFrame {
             cln.setVisible(true);
             panelTombol1.Disable();
         });
-        panelTombol1.getBtnView().addActionListener((ActionEvent e) ->{
+        panelTombol1.getBtnView().addActionListener((ActionEvent e) -> {
             ViewCalon view = new ViewCalon();
             panelTombol1.Disable();
             int data = view.setData(calon);
-            if(data == 0){
+            if (data == 0) {
                 panelTombol1.Terpilih(true);
             }
         });
@@ -68,63 +75,78 @@ public class CalonPanel extends javax.swing.JInternalFrame {
             cln.setVisible(true);
             panelTombol1.Disable();
         });
-        panelTombol1.getBtnDelete().addActionListener((ActionEvent e) ->{
+        panelTombol1.getBtnDelete().addActionListener((ActionEvent e) -> {
             panelTombol1.Disable();
-            int Pilih = JOptionPane.showConfirmDialog(this,"Apakah anda yakin akan menghapus data ini?","Konfirmasi",JOptionPane.YES_NO_OPTION);
-            if(Pilih == JOptionPane.YES_OPTION){
-                ms.deleteCalon(calon);UploadImg.deletePhoto(calon.getFoto());refresh();
+            int Pilih = JOptionPane.showConfirmDialog(this, "Apakah anda yakin akan menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            if (Pilih == JOptionPane.YES_OPTION) {
+                ms.deleteCalon(calon);
+                UploadImg.deletePhoto(calon.getFoto());
+                refresh();
                 ss.makeLog(DataLogger.makeLog(calon, DataLogger.DEL));
-                JOptionPane.showMessageDialog(this,"PENGHAPUSAN BERHASIL");
-            } else{
+                JOptionPane.showMessageDialog(this, "PENGHAPUSAN BERHASIL");
+            } else {
                 panelTombol1.Terpilih(true);
             }
         });
-        panelTombol1.getBtnCancel().addActionListener((ActionEvent e) ->{
-            tData.clearSelection();calon = null;panelTombol1.Terpilih(false);
+        panelTombol1.getBtnCancel().addActionListener((ActionEvent e) -> {
+            tData.clearSelection();
+            calon = null;
+            panelTombol1.Terpilih(false);
         });// </editor-fold>
-    }    
-    
-    private static void loadData(){        
+    }
+
+    private static void loadData() {
         calons = MainUi.getMasterService().getAllCalon();
         tData.setModel(new CalonModel(calons));
     }
 
-    private static class CalonModel extends AbstractTableModel{
+    private static class CalonModel extends AbstractTableModel {
+
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
-        private List<Calon> calonModel = new ArrayList();
+        private List<Calon> calonModel = new ArrayList<>();
 
         public CalonModel(List<Calon> calonModel) {
             this.calonModel = calonModel;
             fireTableDataChanged();
         }
+
         @Override
         public int getRowCount() {
             return calonModel.size();
         }
+
         @Override
         public int getColumnCount() {
             return 13;
         }
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             Calon c = calonModel.get(rowIndex);
-            switch(columnIndex){
-                case 0 : return c.getId();
-                case 1 : return c.getInduk();
-                case 2 : return c.getNama();
-                case 3 : return "<HTML>"+c.getAlamat().replaceAll("\n", " ")+"</HTML>";
-                case 4 : return c.getJenisKelamin();
-                case 5 : return c.getAgama();
-                default : return "";
-            }
+            return switch (columnIndex) {
+                case 0 ->
+                    c.getId();
+                case 1 ->
+                    c.getInduk();
+                case 2 ->
+                    c.getNama();
+                case 3 ->
+                    "<HTML>" + c.getAlamat().replaceAll("\n", " ") + "</HTML>";
+                case 4 ->
+                    c.getJenisKelamin();
+                case 5 ->
+                    c.getAgama();
+                default ->
+                    "";
+            };
         }// </editor-fold>
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -138,139 +160,115 @@ public class CalonPanel extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tData = new javax.swing.JTable();
 
-        setTitle(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.title")); // NOI18N
+        setTitle(bundle.getString("CalonPanel.title")); // NOI18N
 
         lTitle.setFont(new java.awt.Font("Futured", 1, 24)); // NOI18N
         lTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lTitle.setText(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.lTitle.text")); // NOI18N
+        lTitle.setText(bundle.getString("CalonPanel.lTitle.text")); // NOI18N
 
-        sType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Induk", "Nama", "Alamat" }));
-        sType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eCari(evt);
-            }
-        });
+        sType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Induk", "Nama", "Alamat"}));
+        sType.addActionListener(e -> search());
 
-        iForm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eCari(evt);
-            }
-        });
+        iForm.addActionListener(e -> search());
         iForm.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                kCari(evt);
+                search();
             }
         });
 
-        bRefresh.setText(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.bRefresh.text")); // NOI18N
-        bRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cRefresh(evt);
-            }
-        });
+        bRefresh.setText(bundle.getString("CalonPanel.bRefresh.text")); // NOI18N
+        bRefresh.addActionListener(e -> refresh());
 
         tData.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "No. Urut", "No. Induk", "Nama Lengkap", "Alamat", "Jenis Kelamin", "Agama"
-            }
+                new Object[][]{},
+                new String[]{
+                    "No. Urut", "No. Induk", "Nama Lengkap", "Alamat", "Jenis Kelamin", "Agama"
+                }
         ));
         jScrollPane1.setViewportView(tData);
         if (tData.getColumnModel().getColumnCount() > 0) {
             tData.getColumnModel().getColumn(0).setMaxWidth(70);
-            tData.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.tData.columnModel.title0")); // NOI18N
+            tData.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("CalonPanel.tData.columnModel.title0")); // NOI18N
             tData.getColumnModel().getColumn(1).setMinWidth(150);
             tData.getColumnModel().getColumn(1).setMaxWidth(150);
-            tData.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.tData.columnModel.title1")); // NOI18N
+            tData.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("CalonPanel.tData.columnModel.title1")); // NOI18N
             tData.getColumnModel().getColumn(2).setMinWidth(200);
             tData.getColumnModel().getColumn(2).setMaxWidth(250);
-            tData.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.tData.columnModel.title2")); // NOI18N
-            tData.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.tData.columnModel.title3")); // NOI18N
+            tData.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("CalonPanel.tData.columnModel.title2")); // NOI18N
+            tData.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("CalonPanel.tData.columnModel.title3")); // NOI18N
             tData.getColumnModel().getColumn(4).setMinWidth(50);
             tData.getColumnModel().getColumn(4).setMaxWidth(100);
-            tData.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.tData.columnModel.title4")); // NOI18N
+            tData.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("CalonPanel.tData.columnModel.title4")); // NOI18N
             tData.getColumnModel().getColumn(5).setMinWidth(50);
             tData.getColumnModel().getColumn(5).setMaxWidth(100);
-            tData.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(CalonPanel.class, "CalonPanel.tData.columnModel.title5")); // NOI18N
+            tData.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("CalonPanel.tData.columnModel.title5")); // NOI18N
         }
         tData.setAutoCreateColumnsFromModel(false);
 
         javax.swing.GroupLayout pnlCalonLayout = new javax.swing.GroupLayout(pnlCalon);
         pnlCalon.setLayout(pnlCalonLayout);
         pnlCalonLayout.setHorizontalGroup(
-            pnlCalonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlCalonLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlCalonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(lTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
-                    .addGroup(pnlCalonLayout.createSequentialGroup()
-                        .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(iForm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bRefresh))
-                    .addComponent(panelTombol1, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE))
-                .addContainerGap())
+                pnlCalonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlCalonLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(pnlCalonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane1)
+                                        .addComponent(lTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jSeparator1)
+                                        .addGroup(pnlCalonLayout.createSequentialGroup()
+                                                .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(iForm)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(bRefresh))
+                                        .addComponent(panelTombol1, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE))
+                                .addContainerGap())
         );
         pnlCalonLayout.setVerticalGroup(
-            pnlCalonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlCalonLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlCalonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(iForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bRefresh))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelTombol1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                pnlCalonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlCalonLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lTitle)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlCalonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(iForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(bRefresh))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(panelTombol1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlCalon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(pnlCalon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlCalon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(pnlCalon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void kCari(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_kCari
-        search();
-    }//GEN-LAST:event_kCari
-
-    private void eCari(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eCari
-        search();
-    }//GEN-LAST:event_eCari
-
-    private void cRefresh(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cRefresh
-        refresh();
-    }//GEN-LAST:event_cRefresh
-    public static void refresh(){
+    public static void refresh() {
         panelTombol1.Terpilih(false);
         iForm.setText(null);
         sType.setSelectedIndex(0);
         loadData();
     }
-    
-    private void search(){
-        calons = ms.searchCalon(sType.getSelectedIndex(),iForm.getText());        
+
+    private void search() {
+        calons = ms.searchCalon(sType.getSelectedIndex(), iForm.getText());
         tData.setModel(new CalonModel(calons));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

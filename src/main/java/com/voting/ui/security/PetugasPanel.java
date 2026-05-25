@@ -5,25 +5,30 @@
  */
 package com.voting.ui.security;
 
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.AbstractTableModel;
+
 import com.voting.model.security.Admin;
 import com.voting.service.SecurityService;
 import com.voting.ui.frame.MainUi;
 import com.voting.ui.security.dialog.InputPetugas;
 import com.voting.ui.security.dialog.ViewPetugas;
 import com.voting.util.UploadImg;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author Rizal
  */
 public class PetugasPanel extends javax.swing.JInternalFrame {
-    
+
+    private final ResourceBundle bundle = ResourceBundle.getBundle("com.voting.ui.security.Bundle");
+
     private static List<Admin> admins;
     private Admin admin;
     SecurityService ss = MainUi.getSecurityService();
@@ -32,13 +37,15 @@ public class PetugasPanel extends javax.swing.JInternalFrame {
      * Creates new form PetugasPanel
      */
     public PetugasPanel() {
-        initComponents();initListener();loadData();
+        initComponents();
+        initListener();
+        loadData();
     }
-    
+
     private void initListener() {
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
         tData.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            if(tData.getSelectedRow()>=0){
+            if (tData.getSelectedRow() >= 0) {
                 int indexModel = tData.convertRowIndexToModel(tData.getSelectedRow());
                 admin = admins.get(indexModel);
                 panelTombol1.Terpilih(true);
@@ -52,11 +59,11 @@ public class PetugasPanel extends javax.swing.JInternalFrame {
             ad.setVisible(true);
             panelTombol1.Disable();
         });
-        panelTombol1.getBtnView().addActionListener((ActionEvent e) ->{
+        panelTombol1.getBtnView().addActionListener((ActionEvent e) -> {
             ViewPetugas view = new ViewPetugas();
             panelTombol1.Disable();
             int data = view.setData(admin);
-            if(data == 0){
+            if (data == 0) {
                 panelTombol1.Terpilih(true);
             }
         });
@@ -65,53 +72,66 @@ public class PetugasPanel extends javax.swing.JInternalFrame {
             ad.setVisible(true);
             panelTombol1.Disable();
         });
-        panelTombol1.getBtnDelete().addActionListener((ActionEvent e) ->{
+        panelTombol1.getBtnDelete().addActionListener((ActionEvent e) -> {
             panelTombol1.Disable();
-            int Pilih = JOptionPane.showConfirmDialog(this,"Apakah anda yakin akan menghapus data ini?","Konfirmasi",JOptionPane.YES_NO_OPTION);
-            if(Pilih == JOptionPane.YES_OPTION){
-                ss.deleteAdmin(admin);UploadImg.deletePhoto(admin.getFoto());refresh();
-                JOptionPane.showMessageDialog(this,"PENGHAPUSAN BERHASIL");
-            } else{
+            int Pilih = JOptionPane.showConfirmDialog(this, "Apakah anda yakin akan menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            if (Pilih == JOptionPane.YES_OPTION) {
+                ss.deleteAdmin(admin);
+                UploadImg.deletePhoto(admin.getFoto());
+                refresh();
+                JOptionPane.showMessageDialog(this, "PENGHAPUSAN BERHASIL");
+            } else {
                 panelTombol1.Terpilih(true);
             }
         });
-        panelTombol1.getBtnCancel().addActionListener((ActionEvent e) ->{
-            tData.clearSelection();admin = null;panelTombol1.Terpilih(false);
+        panelTombol1.getBtnCancel().addActionListener((ActionEvent e) -> {
+            tData.clearSelection();
+            admin = null;
+            panelTombol1.Terpilih(false);
         });// </editor-fold>
-    }    
-    
-    private static void loadData(){        
+    }
+
+    private static void loadData() {
         admins = MainUi.getSecurityService().getAdmins();
         tData.setModel(new AdminModel(admins));
     }
 
-    private static class AdminModel extends AbstractTableModel{
+    private static class AdminModel extends AbstractTableModel {
+
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
-        private List<Admin> adminModel = new ArrayList();
+        private List<Admin> adminModel = new ArrayList<>();
 
         public AdminModel(List<Admin> adminModel) {
             this.adminModel = adminModel;
             fireTableDataChanged();
         }
+
         @Override
         public int getRowCount() {
             return adminModel.size();
         }
+
         @Override
         public int getColumnCount() {
             return 4;
         }
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             Admin a = adminModel.get(rowIndex);
             //String t="";for(Acc ac:a.getAccList()){t=ac.getId();}
-            switch(columnIndex){
-                case 0 : return a.getUsername();
-                case 1 : return a.getNama();
-                case 2 : return a.getAcc();
-                case 3 : return a.getTpsCode();
-                default : return "";
-            }
+            return switch (columnIndex) {
+                case 0 ->
+                    a.getUsername();
+                case 1 ->
+                    a.getNama();
+                case 2 ->
+                    a.getAcc();
+                case 3 ->
+                    a.getTpsCode();
+                default ->
+                    "";
+            };
         }// </editor-fold>
     }
 
@@ -120,7 +140,6 @@ public class PetugasPanel extends javax.swing.JInternalFrame {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -134,134 +153,109 @@ public class PetugasPanel extends javax.swing.JInternalFrame {
         tData = new javax.swing.JTable();
         panelTombol1 = new com.voting.ui.panel.PanelTombol();
 
-        setTitle(org.openide.util.NbBundle.getMessage(PetugasPanel.class, "PetugasPanel.title")); // NOI18N
+        setTitle(bundle.getString("PetugasPanel.title")); // NOI18N
 
         lTitle.setFont(new java.awt.Font("Futured", 1, 24)); // NOI18N
         lTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lTitle.setText(org.openide.util.NbBundle.getMessage(PetugasPanel.class, "PetugasPanel.lTitle.text")); // NOI18N
+        lTitle.setText(bundle.getString("PetugasPanel.lTitle.text")); // NOI18N
 
-        sType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Username", "Nama", "Tugas", "Kode TPS" }));
-        sType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eCari(evt);
-            }
-        });
+        sType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Username", "Nama", "Tugas", "Kode TPS"}));
+        sType.addActionListener(e -> search());
 
-        bRefresh.setText(org.openide.util.NbBundle.getMessage(PetugasPanel.class, "PetugasPanel.bRefresh.text")); // NOI18N
-        bRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eRefresh(evt);
-            }
-        });
+        bRefresh.setText(bundle.getString("PetugasPanel.bRefresh.text")); // NOI18N
+        bRefresh.addActionListener(e -> refresh());
 
-        iForm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eCari(evt);
-            }
-        });
+        iForm.addActionListener(e -> search());
         iForm.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                kCari(evt);
+                search();
             }
         });
 
         tData.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Username", "Nama Lengkap", "Tugas", "Kode TPS"
-            }
+                new Object[][]{},
+                new String[]{
+                    "Username", "Nama Lengkap", "Tugas", "Kode TPS"
+                }
         ));
         jScrollPane1.setViewportView(tData);
         if (tData.getColumnModel().getColumnCount() > 0) {
             tData.getColumnModel().getColumn(0).setMinWidth(100);
             tData.getColumnModel().getColumn(0).setMaxWidth(150);
-            tData.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(PetugasPanel.class, "PetugasPanel.tData.columnModel.title0")); // NOI18N
-            tData.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(PetugasPanel.class, "PetugasPanel.tData.columnModel.title1")); // NOI18N
+            tData.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("PetugasPanel.tData.columnModel.title0")); // NOI18N
+            tData.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("PetugasPanel.tData.columnModel.title1")); // NOI18N
             tData.getColumnModel().getColumn(2).setMinWidth(150);
             tData.getColumnModel().getColumn(2).setMaxWidth(150);
-            tData.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(PetugasPanel.class, "PetugasPanel.tData.columnModel.title2")); // NOI18N
+            tData.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("PetugasPanel.tData.columnModel.title2")); // NOI18N
             tData.getColumnModel().getColumn(3).setMinWidth(120);
             tData.getColumnModel().getColumn(3).setMaxWidth(120);
-            tData.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(PetugasPanel.class, "PetugasPanel.tData.columnModel.title3")); // NOI18N
+            tData.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("PetugasPanel.tData.columnModel.title3")); // NOI18N
         }
         tData.setAutoCreateColumnsFromModel(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(lTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(iForm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bRefresh))
-                    .addComponent(panelTombol1, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE))
-                .addContainerGap())
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane1)
+                                        .addComponent(lTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jSeparator1)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(iForm)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(bRefresh))
+                                        .addComponent(panelTombol1, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE))
+                                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bRefresh)
-                    .addComponent(iForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelTombol1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lTitle)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(bRefresh)
+                                        .addComponent(iForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(panelTombol1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void eCari(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eCari
-        search();
-    }//GEN-LAST:event_eCari
-
-    private void kCari(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_kCari
-        search();
-    }//GEN-LAST:event_kCari
-
-    private void eRefresh(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eRefresh
-        refresh();
-    }//GEN-LAST:event_eRefresh
-
-    public static void refresh(){
+    public static void refresh() {
         panelTombol1.Terpilih(false);
         iForm.setText(null);
         sType.setSelectedIndex(0);
         loadData();
     }
-    
-    private void search(){
+
+    private void search() {
         //admins = ss.searchCalon(sType.getSelectedIndex(),iForm.getText());        
         //tData.setModel(new AdminModel(admins));
     }

@@ -5,6 +5,15 @@
  */
 package com.voting.ui.master;
 
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.AbstractTableModel;
+
 import com.voting.model.master.Tps;
 import com.voting.service.MasterService;
 import com.voting.service.SecurityService;
@@ -12,18 +21,14 @@ import com.voting.ui.frame.MainUi;
 import com.voting.ui.master.dialog.InputTps;
 import com.voting.ui.master.dialog.ViewTps;
 import com.voting.util.DataLogger;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author Rizal
  */
-public class TpsPanel extends javax.swing.JInternalFrame {    
+public class TpsPanel extends javax.swing.JInternalFrame {
+
+    private final ResourceBundle bundle = ResourceBundle.getBundle("com.voting.ui.master.Bundle");
     private static List<Tps> tpss;
     private Tps tps;
     private long count;
@@ -34,17 +39,22 @@ public class TpsPanel extends javax.swing.JInternalFrame {
      * Creates new form TPSPanel
      */
     public TpsPanel() {
-        initComponents();initListener();loadData();
+        initComponents();
+        initListener();
+        loadData();
     }
-    
+
     private void initListener() {
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
         tData.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            if(tData.getSelectedRow()>=0){
+            if (tData.getSelectedRow() >= 0) {
                 int indexModel = tData.convertRowIndexToModel(tData.getSelectedRow());
-                count = (long) tData.getValueAt(tData.getSelectedRow(),7);
-                tps = tpss.get(indexModel);panelTombol1.Terpilih(true);
-                if(count!=0){panelTombol1.getBtnDelete().setEnabled(false);}
+                count = (long) tData.getValueAt(tData.getSelectedRow(), 7);
+                tps = tpss.get(indexModel);
+                panelTombol1.Terpilih(true);
+                if (count != 0) {
+                    panelTombol1.getBtnDelete().setEnabled(false);
+                }
             }
         });
         panelTombol1.getBtnExit().addActionListener((ActionEvent e) -> {
@@ -55,11 +65,11 @@ public class TpsPanel extends javax.swing.JInternalFrame {
             ts.setVisible(true);
             panelTombol1.Disable();
         });
-        panelTombol1.getBtnView().addActionListener((ActionEvent e) ->{
+        panelTombol1.getBtnView().addActionListener((ActionEvent e) -> {
             ViewTps view = new ViewTps();
             panelTombol1.Disable();
             int data = view.setData(tps, count);
-            if(data == 0){
+            if (data == 0) {
                 panelTombol1.Terpilih(true);
             }
         });
@@ -68,57 +78,73 @@ public class TpsPanel extends javax.swing.JInternalFrame {
             ts.setVisible(true);
             panelTombol1.Disable();
         });
-        panelTombol1.getBtnDelete().addActionListener((ActionEvent e) ->{
+        panelTombol1.getBtnDelete().addActionListener((ActionEvent e) -> {
             panelTombol1.Disable();
-            int Pilih = JOptionPane.showConfirmDialog(this,"Apakah anda yakin akan menghapus data ini?","Konfirmasi",JOptionPane.YES_NO_OPTION);
-            if(Pilih == JOptionPane.YES_OPTION){
-                ms.deleteTps(tps);refresh();
+            int Pilih = JOptionPane.showConfirmDialog(this, "Apakah anda yakin akan menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            if (Pilih == JOptionPane.YES_OPTION) {
+                ms.deleteTps(tps);
+                refresh();
                 ss.makeLog(DataLogger.makeLog(tps, DataLogger.DEL));
-                JOptionPane.showMessageDialog(this,"PENGHAPUSAN BERHASIL");
-            } else{
+                JOptionPane.showMessageDialog(this, "PENGHAPUSAN BERHASIL");
+            } else {
                 panelTombol1.Terpilih(true);
             }
         });
-        panelTombol1.getBtnCancel().addActionListener((ActionEvent e) ->{
-            tData.clearSelection();tps = null;panelTombol1.Terpilih(false);
+        panelTombol1.getBtnCancel().addActionListener((ActionEvent e) -> {
+            tData.clearSelection();
+            tps = null;
+            panelTombol1.Terpilih(false);
         });// </editor-fold>
     }
-    
-    private static void loadData(){
+
+    private static void loadData() {
         tpss = MainUi.getMasterService().getAllTps();
         tData.setModel(new TpsModel(tpss));
     }
 
-    private static class TpsModel extends AbstractTableModel{
+    private static class TpsModel extends AbstractTableModel {
+
         // <editor-fold defaultstate="collapsed" desc="Compiled Code">
-        private List<Tps> tpsModel = new ArrayList();
+        private List<Tps> tpsModel = new ArrayList<>();
 
         public TpsModel(List<Tps> tpsModel) {
             this.tpsModel = tpsModel;
             fireTableDataChanged();
         }
+
         @Override
         public int getRowCount() {
             return tpsModel.size();
         }
+
         @Override
         public int getColumnCount() {
             return 8;
         }
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             Tps t = tpsModel.get(rowIndex);
-            switch(columnIndex){
-                case 0 : return t.getProvCode();
-                case 1 : return t.getKabCode();
-                case 2 : return t.getKecCode();
-                case 3 : return t.getDesCode();
-                case 4 : return "<HTML>"+t.getDesk().replaceAll("\n", " ")+"</HTML>";
-                case 5 : return t.getNo();
-                case 6 : return t.getCode();
-                case 7 : return countP(t);
-                default : return "";
-            }
+            return switch (columnIndex) {
+                case 0 ->
+                    t.getProvCode();
+                case 1 ->
+                    t.getKabCode();
+                case 2 ->
+                    t.getKecCode();
+                case 3 ->
+                    t.getDesCode();
+                case 4 ->
+                    "<HTML>" + t.getDesk().replaceAll("\n", " ") + "</HTML>";
+                case 5 ->
+                    t.getNo();
+                case 6 ->
+                    t.getCode();
+                case 7 ->
+                    countP(t);
+                default ->
+                    "";
+            };
         }// </editor-fold>
     }
 
@@ -127,7 +153,6 @@ public class TpsPanel extends javax.swing.JInternalFrame {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -141,142 +166,118 @@ public class TpsPanel extends javax.swing.JInternalFrame {
         jSeparator1 = new javax.swing.JSeparator();
         panelTombol1 = new com.voting.ui.panel.PanelTombol();
 
-        setTitle(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.title")); // NOI18N
+        setTitle(bundle.getString("TpsPanel.title")); // NOI18N
 
         lTitle.setFont(new java.awt.Font("Futured", 1, 24)); // NOI18N
         lTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lTitle.setText(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.lTitle.text")); // NOI18N
+        lTitle.setText(bundle.getString("TpsPanel.lTitle.text")); // NOI18N
 
         tData.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Provinsi", "Kabupaten", "Kecamatan", "Desa/Kelurahan", "Deskripsi", "Nomor", "Kode TPS", "Jumlah DPT"
-            }
+                new Object[][]{},
+                new String[]{
+                    "Provinsi", "Kabupaten", "Kecamatan", "Desa/Kelurahan", "Deskripsi", "Nomor", "Kode TPS", "Jumlah DPT"
+                }
         ));
         jScrollPane1.setViewportView(tData);
         if (tData.getColumnModel().getColumnCount() > 0) {
-            tData.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.tData.columnModel.title0_1")); // NOI18N
-            tData.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.tData.columnModel.title1_1")); // NOI18N
-            tData.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.tData.columnModel.title2_1")); // NOI18N
-            tData.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.tData.columnModel.title3_1")); // NOI18N
-            tData.getColumnModel().getColumn(4).setHeaderValue(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.tData.columnModel.title7")); // NOI18N
+            tData.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("TpsPanel.tData.columnModel.title0_1")); // NOI18N
+            tData.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("TpsPanel.tData.columnModel.title1_1")); // NOI18N
+            tData.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("TpsPanel.tData.columnModel.title2_1")); // NOI18N
+            tData.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("TpsPanel.tData.columnModel.title3_1")); // NOI18N
+            tData.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("TpsPanel.tData.columnModel.title7")); // NOI18N
             tData.getColumnModel().getColumn(5).setMinWidth(75);
             tData.getColumnModel().getColumn(5).setMaxWidth(75);
-            tData.getColumnModel().getColumn(5).setHeaderValue(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.tData.columnModel.title4_1")); // NOI18N
+            tData.getColumnModel().getColumn(5).setHeaderValue(bundle.getString("TpsPanel.tData.columnModel.title4_1")); // NOI18N
             tData.getColumnModel().getColumn(6).setMinWidth(120);
             tData.getColumnModel().getColumn(6).setMaxWidth(120);
-            tData.getColumnModel().getColumn(6).setHeaderValue(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.tData.columnModel.title5_1")); // NOI18N
+            tData.getColumnModel().getColumn(6).setHeaderValue(bundle.getString("TpsPanel.tData.columnModel.title5_1")); // NOI18N
             tData.getColumnModel().getColumn(7).setMinWidth(100);
             tData.getColumnModel().getColumn(7).setMaxWidth(100);
-            tData.getColumnModel().getColumn(7).setHeaderValue(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.tData.columnModel.title6_1")); // NOI18N
+            tData.getColumnModel().getColumn(7).setHeaderValue(bundle.getString("TpsPanel.tData.columnModel.title6_1")); // NOI18N
         }
         tData.setAutoCreateColumnsFromModel(false);
 
-        sType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Provinsi", "Kabupaten", "Kecamatan", "Desa/Kelurahan", "Kode TPS", "Deskripsi" }));
-        sType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eCari(evt);
-            }
-        });
+        sType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Provinsi", "Kabupaten", "Kecamatan", "Desa/Kelurahan", "Kode TPS", "Deskripsi"}));
+        sType.addActionListener(e -> search());
 
-        iForm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eCari(evt);
-            }
-        });
+        iForm.addActionListener(e -> search());
         iForm.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                kCari(evt);
+                search();
             }
         });
 
-        bRefresh.setText(org.openide.util.NbBundle.getMessage(TpsPanel.class, "TpsPanel.bRefresh.text")); // NOI18N
-        bRefresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eRefresh(evt);
-            }
-        });
+        bRefresh.setText(bundle.getString("TpsPanel.bRefresh.text")); // NOI18N
+        bRefresh.addActionListener(e -> refresh());
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(iForm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bRefresh))
-                    .addComponent(panelTombol1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE)
+                                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(iForm)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(bRefresh))
+                                        .addComponent(panelTombol1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(iForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bRefresh))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelTombol1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(sType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(iForm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(bRefresh))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(panelTombol1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, 0)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void eCari(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eCari
-        search();
-    }//GEN-LAST:event_eCari
-
-    private void kCari(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_kCari
-        search();
-    }//GEN-LAST:event_kCari
-
-    private void eRefresh(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eRefresh
-        refresh();
-    }//GEN-LAST:event_eRefresh
-    public static void refresh(){
+    public static void refresh() {
         panelTombol1.Terpilih(false);
         iForm.setText(null);
         sType.setSelectedIndex(0);
         loadData();
     }
-    
-    private static long countP(Tps t){
+
+    private static long countP(Tps t) {
         return MainUi.getMasterService().countT(t);
     }
-    
-    private void search(){
-        tpss = MainUi.getMasterService().searchTps(sType.getSelectedIndex(),iForm.getText());        
+
+    private void search() {
+        tpss = MainUi.getMasterService().searchTps(sType.getSelectedIndex(), iForm.getText());
         tData.setModel(new TpsModel(tpss));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
