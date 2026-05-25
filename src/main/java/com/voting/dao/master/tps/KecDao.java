@@ -5,19 +5,23 @@
  */
 package com.voting.dao.master.tps;
 
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import com.voting.dao.BaseDao;
 import com.voting.model.master.tps.Kab;
 import com.voting.model.master.tps.Kec;
-import java.util.List;
-import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Rizal
  */
 @Repository
-public class KecDao extends BaseDao<Kec>{
-    public List<Kec> getFromKab(Kab k){
+public class KecDao extends BaseDao<Kec> {
+
+    @SuppressWarnings("unchecked")
+    public List<Kec> getFromKab(Kab k) {
         return sessionFactory.getCurrentSession().getNamedQuery("Kec.findByKab")
                 .setParameter("code", k.getCode()).list();
     }

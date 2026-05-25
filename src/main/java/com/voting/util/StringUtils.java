@@ -15,6 +15,7 @@ import java.util.logging.Logger;
  * @author Rizal
  */
 public class StringUtils {
+
     static final byte[] HEX_CHAR_TABLE = {
         (byte) '0', (byte) '1', (byte) '2', (byte) '3',
         (byte) '4', (byte) '5', (byte) '6', (byte) '7',
@@ -36,11 +37,11 @@ public class StringUtils {
             Logger.getLogger(StringUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }    
-    
-    public static String setTanggal(Date d){
-        String[] bulan={"Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"};
-        int month=d.getMonth();
-        return d.getDate()+" "+bulan[month]+" "+(1900+d.getYear());
+    }
+
+    public static String setTanggal(Date d) {
+        String[] bulan = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+        int month = d.getMonth();
+        return d.getDate() + " " + bulan[month] + " " + (1900 + d.getYear());
     }
 }

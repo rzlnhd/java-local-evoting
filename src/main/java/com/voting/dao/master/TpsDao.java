@@ -5,39 +5,53 @@
  */
 package com.voting.dao.master;
 
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import com.voting.dao.BaseDao;
 import com.voting.model.master.Tps;
-import java.util.List;
-import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Rizal
  */
 @Repository
-public class TpsDao extends BaseDao<Tps>{
-    public List<Tps> getTpsFromProv(String nilai){
+public class TpsDao extends BaseDao<Tps> {
+
+    @SuppressWarnings("unchecked")
+    public List<Tps> getTpsFromProv(String nilai) {
         return sessionFactory.getCurrentSession().getNamedQuery("Tps.findByProv")
-                .setParameter("nilai", "%"+nilai+"%").list();        
+                .setParameter("nilai", "%" + nilai + "%").list();
     }
-    public List<Tps> getTpsFromKab(String nilai){
+
+    @SuppressWarnings("unchecked")
+    public List<Tps> getTpsFromKab(String nilai) {
         return sessionFactory.getCurrentSession().getNamedQuery("Tps.findByKab")
-                .setParameter("nilai", "%"+nilai+"%").list();        
+                .setParameter("nilai", "%" + nilai + "%").list();
     }
-    public List<Tps> getTpsFromKec(String nilai){
+
+    @SuppressWarnings("unchecked")
+    public List<Tps> getTpsFromKec(String nilai) {
         return sessionFactory.getCurrentSession().getNamedQuery("Tps.findByKec")
-                .setParameter("nilai", "%"+nilai+"%").list();        
+                .setParameter("nilai", "%" + nilai + "%").list();
     }
-    public List<Tps> getTpsFromDes(String nilai){
+
+    @SuppressWarnings("unchecked")
+    public List<Tps> getTpsFromDes(String nilai) {
         return sessionFactory.getCurrentSession().getNamedQuery("Tps.findByDes")
-                .setParameter("nilai", "%"+nilai+"%").list();        
+                .setParameter("nilai", "%" + nilai + "%").list();
     }
-    public List<Tps> getTpsFromCode(String c){
+
+    @SuppressWarnings("unchecked")
+    public List<Tps> getTpsFromCode(String c) {
         return sessionFactory.getCurrentSession().getNamedQuery("Tps.findByCode")
-                .setParameter("code", "%"+c+"%").list();        
+                .setParameter("code", "%" + c + "%").list();
     }
-    public List<Tps> getTpsFromDesk(String desk){
+
+    @SuppressWarnings("unchecked")
+    public List<Tps> getTpsFromDesk(String desk) {
         return sessionFactory.getCurrentSession().getNamedQuery("Tps.findByDesk")
-                .setParameter("desk", "%"+desk+"%").list();        
+                .setParameter("desk", "%" + desk + "%").list();
     }
 }

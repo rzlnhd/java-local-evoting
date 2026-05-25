@@ -34,19 +34,28 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Rizal
  */
 @Service("masterService")
-@Transactional(readOnly=true)
-public class MasterServiceImpl implements MasterService{
-    @Autowired private PemilihDao pemilihDao;
-    @Autowired private DifabelDao difabelDao;
-    @Autowired private StatusDao statusDao;
-    @Autowired private CalonDao calonDao;
-    @Autowired private TpsDao tpsDao;
-    @Autowired private ProvDao provDao;
-    @Autowired private KabDao kabDao;
-    @Autowired private KecDao kecDao;    
-    @Autowired private DesDao desDao;
-    
-    
+@Transactional(readOnly = true)
+public class MasterServiceImpl implements MasterService {
+
+    @Autowired
+    private PemilihDao pemilihDao;
+    @Autowired
+    private DifabelDao difabelDao;
+    @Autowired
+    private StatusDao statusDao;
+    @Autowired
+    private CalonDao calonDao;
+    @Autowired
+    private TpsDao tpsDao;
+    @Autowired
+    private ProvDao provDao;
+    @Autowired
+    private KabDao kabDao;
+    @Autowired
+    private KecDao kecDao;
+    @Autowired
+    private DesDao desDao;
+
     /* 
      * Master Service Pemilih
      */
@@ -55,7 +64,7 @@ public class MasterServiceImpl implements MasterService{
     public void savePemilih(Pemilih p) {
         pemilihDao.save(p);
     }
-    
+
     @Transactional
     @Override
     public void updatePemilih(Pemilih p) {
@@ -72,34 +81,42 @@ public class MasterServiceImpl implements MasterService{
     public Pemilih getPemilih(String c) {
         return pemilihDao.getFromCode(c);
     }
-    
+
     @Override
-    public List<Pemilih> getAllPemilih(){
+    public List<Pemilih> getAllPemilih() {
         return pemilihDao.getAll();
     }
-    
+
     @Override
-    public List<Pemilih> getAllPemilih(Tps t){
+    public List<Pemilih> getAllPemilih(Tps t) {
         return pemilihDao.getAll(t);
     }
 
     @Override
-    public List<Pemilih> searchPemilih(int i,String s) {
-        switch(i){
-            default: return pemilihDao.cariBerdasarKk(s);
-            case 1: return pemilihDao.cariBerdasarId(s);
-            case 2: return pemilihDao.cariBerdasarNama(s);
-            case 3: return pemilihDao.cariBerdasarAlamat(s);
+    public List<Pemilih> searchPemilih(int i, String s) {
+        switch (i) {
+            default -> {
+                return pemilihDao.cariBerdasarKk(s);
+            }
+            case 1 -> {
+                return pemilihDao.cariBerdasarId(s);
+            }
+            case 2 -> {
+                return pemilihDao.cariBerdasarNama(s);
+            }
+            case 3 -> {
+                return pemilihDao.cariBerdasarAlamat(s);
+            }
         }
     }
-    
+
     @Override
-    public List<Difabel> getAllDifabel(){
+    public List<Difabel> getAllDifabel() {
         return difabelDao.getAll();
     }
-    
+
     @Override
-    public List<Status> getAllStatus(){
+    public List<Status> getAllStatus() {
         return statusDao.getAll();
     }
 
@@ -107,22 +124,22 @@ public class MasterServiceImpl implements MasterService{
     public long countT(Tps t) {
         return pemilihDao.countT(t.getCode());
     }
-    
+
     @Override
     public long countP(int ket, String jk) {
-        if(jk.equals("0")){
-            if(ket!=2){
+        if (jk.equals("0")) {
+            if (ket != 2) {
                 return pemilihDao.countP(ket);
             } else {
                 return pemilihDao.countP();
             }
-        } else if(ket==2){
+        } else if (ket == 2) {
             return pemilihDao.countP(jk);
-        } else{
-            return pemilihDao.countP(ket,jk);
+        } else {
+            return pemilihDao.countP(ket, jk);
         }
     }
-    
+
     /* 
      * Master Service Calon
      */
@@ -131,13 +148,13 @@ public class MasterServiceImpl implements MasterService{
     public void saveCalon(Calon c) {
         calonDao.save(c);
     }
-    
+
     @Transactional
     @Override
     public void updateCalon(Calon c) {
         calonDao.update(c);
     }
-    
+
     @Transactional
     @Override
     public void deleteCalon(Calon c) {
@@ -147,11 +164,11 @@ public class MasterServiceImpl implements MasterService{
     @Override
     public Calon getCalon(String c) {
         return calonDao.getFromCode(c);
-        
+
     }
-    
+
     @Override
-    public Calon getCalonFromId(int c){
+    public Calon getCalonFromId(int c) {
         return calonDao.cariBerdasarUrut(c);
     }
 
@@ -161,20 +178,26 @@ public class MasterServiceImpl implements MasterService{
     }
 
     @Override
-    public List<Calon> searchCalon(int i, String s) {        
-        switch(i){
-            default: return calonDao.cariBerdasarId(s);
-            case 1: return calonDao.cariBerdasarNama(s);
-            case 2: return calonDao.cariBerdasarAlamat(s);
+    public List<Calon> searchCalon(int i, String s) {
+        switch (i) {
+            default -> {
+                return calonDao.cariBerdasarId(s);
+            }
+            case 1 -> {
+                return calonDao.cariBerdasarNama(s);
+            }
+            case 2 -> {
+                return calonDao.cariBerdasarAlamat(s);
+            }
         }
     }
-    
+
     /* 
      * Master Service TPS
      */
     @Transactional
     @Override
-    public void saveTps(Tps t){
+    public void saveTps(Tps t) {
         tpsDao.save(t);
     }
 
@@ -183,7 +206,7 @@ public class MasterServiceImpl implements MasterService{
     public void updateTPS(Tps t) {
         tpsDao.update(t);
     }
-    
+
     @Transactional
     @Override
     public void deleteTps(Tps t) {
@@ -197,13 +220,25 @@ public class MasterServiceImpl implements MasterService{
 
     @Override
     public List<Tps> searchTps(int i, String s) {
-        switch(i){
-            default: return tpsDao.getTpsFromProv(s);
-            case 1: return tpsDao.getTpsFromKab(s);
-            case 2: return tpsDao.getTpsFromKec(s);
-            case 3: return tpsDao.getTpsFromDes(s);
-            case 4: return tpsDao.getTpsFromCode(s);
-            case 5: return tpsDao.getTpsFromDesk(s);
+        switch (i) {
+            default -> {
+                return tpsDao.getTpsFromProv(s);
+            }
+            case 1 -> {
+                return tpsDao.getTpsFromKab(s);
+            }
+            case 2 -> {
+                return tpsDao.getTpsFromKec(s);
+            }
+            case 3 -> {
+                return tpsDao.getTpsFromDes(s);
+            }
+            case 4 -> {
+                return tpsDao.getTpsFromCode(s);
+            }
+            case 5 -> {
+                return tpsDao.getTpsFromDesk(s);
+            }
         }
     }
 

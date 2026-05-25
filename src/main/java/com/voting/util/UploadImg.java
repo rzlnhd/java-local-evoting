@@ -1,47 +1,48 @@
 package com.voting.util;
 
-
-import com.voting.ui.frame.MainUi;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import javax.imageio.ImageIO;
+
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.openide.util.Exceptions;
+
+import com.voting.ui.frame.MainUi;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Rizal
  */
 public class UploadImg {
-    
-    public static String uploadImage(BufferedImage image, String path, String name){
-        String filename = path+"/"+name, url="http://address/voting/aset/"+filename;
+
+    public static String uploadImage(BufferedImage image, String path, String name) {
+        String filename = path + "/" + name, url = "http://address/voting/aset/" + filename;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        try { 
+        try {
             ImageIO.write(check(image), "JPG", os);
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }
         InputStream input = new ByteArrayInputStream(os.toByteArray());
-        upload(input,filename);
+        upload(input, filename);
         return url;
     }
-    
-    public static void deletePhoto(String path){
+
+    public static void deletePhoto(String path) {
         String server = MainUi.getAppsIp(),
-                filename=path.replace("http://address/voting/aset/", "");
+                filename = path.replace("http://address/voting/aset/", "");
         int port = 21;
         String user = "root";
         String pass = "root";
@@ -61,8 +62,8 @@ public class UploadImg {
             System.out.println("Oops! Something wrong happened");
         }
     }
-    
-    private static void upload(InputStream input, String filename){
+
+    private static void upload(InputStream input, String filename) {
         String server = MainUi.getAppsIp();
         int port = 21;
         String user = "root";
@@ -81,9 +82,10 @@ public class UploadImg {
             ftpClient.logout();
         } catch (IOException ex) {
             System.out.println("Oops! Something wrong happened");
-        }        
+        }
     }
-    
+
+    @SuppressWarnings("unused")
     private static void showServerReply(FTPClient ftpClient) {
         String[] replies = ftpClient.getReplyStrings();
         if (replies != null && replies.length > 0) {
@@ -92,11 +94,14 @@ public class UploadImg {
             }
         }
     }
-    
-    private static BufferedImage check(BufferedImage img){
-        if (img instanceof BufferedImage){
+
+    private static BufferedImage check(BufferedImage img) {
+        if (img instanceof BufferedImage) {
             return img;
         } else {
+            if (img == null) {
+                return null;
+            }
             // Create a buffered image with transparency
             BufferedImage bimage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
             // Draw the image on to the buffered image

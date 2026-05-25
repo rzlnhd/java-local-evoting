@@ -4,7 +4,6 @@ package com.voting.util;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import com.voting.ui.frame.MainUi;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
@@ -21,7 +20,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import org.springframework.util.StringUtils;
 
-/** TextComponentUtils ini adalah utility yang bertugas untuk mengatur segala
+/**
+ * TextComponentUtils ini adalah utility yang bertugas untuk mengatur segala
  * keperluan pada Component JTextField. Behaviour yang terdapat pada class ini
  * adalah sebagai berikut :
  *
@@ -31,17 +31,19 @@ public class TextComponentUtils {
 
     private static final String BAD_CHARS = "`~!@#$%^&*()_+=\\|\"':;?/>.<, ";
 
-    public static void scrollToRect(JTable table,int nextSelectedRow){
+    public static void scrollToRect(JTable table, int nextSelectedRow) {
         Rectangle currentVisible = table.getVisibleRect();
         Rectangle scrollToRect = table.getCellRect(nextSelectedRow, 0, true);
-        if(scrollToRect.getY() > currentVisible.getY() + currentVisible.getHeight()){
+        if (scrollToRect.getY() > currentVisible.getY() + currentVisible.getHeight()) {
             scrollToRect.setLocation(0,
-                    (int)(scrollToRect.getY() + currentVisible.getHeight() - scrollToRect.getHeight()));
+                    (int) (scrollToRect.getY() + currentVisible.getHeight() - scrollToRect.getHeight()));
         }
         table.scrollRectToVisible(scrollToRect);
     }
 
-    /** TextComponentUtils.setMaximumLength()
+    /**
+     * TextComponentUtils.setMaximumLength()
+     *
      * @param maximumChar
      * @param textField
      */
@@ -67,28 +69,30 @@ public class TextComponentUtils {
 
             @Override
             public void keyTyped(KeyEvent evt) {
-                if (!Character.isDigit(evt.getKeyChar()) ||
-                    BAD_CHARS.indexOf(evt.getKeyChar()) > -1) {
-                        evt.consume();
-                    }
+                if (!Character.isDigit(evt.getKeyChar())
+                        || BAD_CHARS.indexOf(evt.getKeyChar()) > -1) {
+                    evt.consume();
                 }
+            }
         });
     }
 
-    public static JTextField setCurrency(JTextField textField){
+    public static JTextField setCurrency(JTextField textField) {
         textField.addKeyListener(new IntegerMasking());
         return textField;
     }
 
-    public static BigDecimal parseNumberToBigDecimal(String text){
-        if(!StringUtils.hasText(text)) return BigDecimal.ZERO;
+    public static BigDecimal parseNumberToBigDecimal(String text) {
+        if (!StringUtils.hasText(text)) {
+            return BigDecimal.ZERO;
+        }
         try {
             BigDecimal number = new BigDecimal(NumberFormat.getInstance().parse(text).doubleValue());
             return number;
         } catch (ParseException ex) {
-            if(Locale.US == Locale.getDefault()){
+            if (Locale.US == Locale.getDefault()) {
                 JOptionPane.showMessageDialog(MainUi.getInstance(), "Regional setting anda menggunakan US. Pemisah ribuan adalah . (titlk) dan pemisah pecahan adalah , (koma)");
-            } else if(Locale.getDefault().getCountry().equalsIgnoreCase("INDONESIA")
+            } else if (Locale.getDefault().getCountry().equalsIgnoreCase("INDONESIA")
                     && Locale.getDefault().getLanguage().equalsIgnoreCase("ID")) {
                 JOptionPane.showMessageDialog(MainUi.getInstance(), "Regional setting anda menggunakan Indonesia. Pemisah ribuan adalah , (koma) dan pemisah pecahan adalah . (titik)");
             }
@@ -107,7 +111,7 @@ public class TextComponentUtils {
             }
         });
     }
-    
+
     public static void setAutoUpperCaseText(final javax.swing.JTextArea textArea) {
         textArea.addKeyListener(new java.awt.event.KeyAdapter() {
 
@@ -128,14 +132,17 @@ public class TextComponentUtils {
         }
     }
 
-    /** Method ini akan mengambil text angka saja
+    /**
+     * Method ini akan mengambil text angka saja
+     *
      * @param text
-     * @return  */
+     * @return
+     */
     public static String getValueFromTextNumber(final JTextField text) {
         final char txt[] = text.getText().toCharArray();
         StringBuilder sb = new StringBuilder();
         String tmp;
-        for (int i=0; i<txt.length; i++) {
+        for (int i = 0; i < txt.length; i++) {
             tmp = String.valueOf(txt[i]);
 
             if (tmp.equals(".") || tmp.equals(",")) {
@@ -150,26 +157,27 @@ public class TextComponentUtils {
     private static void convertToUpperCase(final javax.swing.JTextField textField) {
         textField.setText(textField.getText().toUpperCase());
     }
-    
+
     private static void convertToUpperCase(final javax.swing.JTextArea textField) {
         textField.setText(textField.getText().toUpperCase());
     }
 
     private static class IntegerMasking implements KeyListener {
+
         @Override
         public void keyTyped(KeyEvent evt) {
             JTextField source = (JTextField) evt.getSource();
-            if(Locale.getDefault() == Locale.US){
-                if (Character.isLetter(evt.getKeyChar()) ||
-                        BAD_CHARS.indexOf(evt.getKeyChar()) >= 0) {
-                    if(evt.getKeyChar()!='.' || source.getText().indexOf('.') >= 0){
+            if (Locale.getDefault() == Locale.US) {
+                if (Character.isLetter(evt.getKeyChar())
+                        || BAD_CHARS.indexOf(evt.getKeyChar()) >= 0) {
+                    if (evt.getKeyChar() != '.' || source.getText().indexOf('.') >= 0) {
                         evt.consume();
                     }
                 }
             } else {
-                if (Character.isLetter(evt.getKeyChar()) ||
-                        BAD_CHARS.indexOf(evt.getKeyChar()) >= 0 ) {
-                    if(evt.getKeyChar()!=',' || source.getText().indexOf(',') >= 0){
+                if (Character.isLetter(evt.getKeyChar())
+                        || BAD_CHARS.indexOf(evt.getKeyChar()) >= 0) {
+                    if (evt.getKeyChar() != ',' || source.getText().indexOf(',') >= 0) {
                         evt.consume();
                     }
                 }
@@ -183,25 +191,24 @@ public class TextComponentUtils {
 
         @Override
         public void keyReleased(KeyEvent evt) {
-            if(evt.getKeyCode() == KeyEvent.VK_LEFT
-                    || evt.getKeyCode() == KeyEvent.VK_RIGHT){
+            if (evt.getKeyCode() == KeyEvent.VK_LEFT
+                    || evt.getKeyCode() == KeyEvent.VK_RIGHT) {
                 return;
             }
-            if (evt.getSource() instanceof JTextField ) {
-                JTextField textField = (JTextField) evt.getSource();
+            if (evt.getSource() instanceof JTextField textField) {
                 int caretPosition = textField.getCaretPosition();
-                int initialLentgh = textField.getText()!=null ? textField.getText().length() : 0;
+                int initialLentgh = textField.getText() != null ? textField.getText().length() : 0;
                 String formatedNumber = formatNumber(textField.getText());
                 textField.setText(formatedNumber);
-                if(formatedNumber.length() > initialLentgh){
+                if (formatedNumber.length() > initialLentgh) {
                     textField.setCaretPosition(caretPosition + 1);
                 }
             }
         }
     }
 
-    public static String formatNumber(BigDecimal value){
-        if(value == null || value.equals(BigDecimal.ZERO)){
+    public static String formatNumber(BigDecimal value) {
+        if (value == null || value.equals(BigDecimal.ZERO)) {
             return "0";
         } else {
             NumberFormat formatter = NumberFormat.getInstance();
@@ -211,14 +218,14 @@ public class TextComponentUtils {
         }
     }
 
-    public static String formatNumber(String text){
+    public static String formatNumber(String text) {
         char thousandsSeparator = '.';
         char decimalSeparator = ',';
-        if(Locale.getDefault().equals(Locale.US)){
+        if (Locale.getDefault().equals(Locale.US)) {
             thousandsSeparator = ',';
             decimalSeparator = '.';
-        } else if(Locale.getDefault().getCountry().equalsIgnoreCase("INDONESIA")
-                && Locale.getDefault().getLanguage().equalsIgnoreCase("ID")){
+        } else if (Locale.getDefault().getCountry().equalsIgnoreCase("INDONESIA")
+                && Locale.getDefault().getLanguage().equalsIgnoreCase("ID")) {
             thousandsSeparator = '.';
             decimalSeparator = ',';
         }
@@ -227,7 +234,7 @@ public class TextComponentUtils {
         for (Character c : text.toCharArray()) {
             if (c != thousandsSeparator) {
                 builder.append(c);
-                if(c == decimalSeparator ){
+                if (c == decimalSeparator) {
                     isDecimalSeparatorFound = true;
                 }
             }
@@ -236,24 +243,23 @@ public class TextComponentUtils {
         StringBuilder builder1 = new StringBuilder();
         int maxIndex = arr.length - 1;
         //mengambil pecahan
-        int i=0;
+        int i = 0;
         int decimalSeparatorIndex = 0;
-        if(isDecimalSeparatorFound){
-            for(;i<=maxIndex;i++){
+        if (isDecimalSeparatorFound) {
+            for (; i <= maxIndex; i++) {
                 char c = arr[maxIndex - i];
-                if(c!=decimalSeparator){
+                if (c != decimalSeparator) {
                     builder1.append(c);
                 } else {
-                    isDecimalSeparatorFound = false;
                     break;
                 }
             }
             builder1.append(arr[maxIndex - i++]);
             decimalSeparatorIndex = i;
         }
-        for (i=0; i <= maxIndex - decimalSeparatorIndex; i++) {
+        for (i = 0; i <= maxIndex - decimalSeparatorIndex; i++) {
             char c = arr[maxIndex - i - decimalSeparatorIndex];
-            if (i != 0 && i % 3 == 0 ) {
+            if (i != 0 && i % 3 == 0) {
                 builder1.append(thousandsSeparator);
                 builder1.append(c);
             } else {

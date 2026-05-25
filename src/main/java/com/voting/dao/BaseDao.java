@@ -7,6 +7,7 @@ package com.voting.dao;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,23 +17,23 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @param <T>
  */
 public class BaseDao<T> {
-    @SuppressWarnings("unchecked")
-    protected Class domainClass;
-    
-    @Autowired protected SessionFactory sessionFactory;    
+
+    protected Class<T> domainClass;
+
+    @Autowired
+    protected SessionFactory sessionFactory;
 
     @SuppressWarnings("unchecked")
     public BaseDao() {
-        this.domainClass = (Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.domainClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
-
 
     public void save(T domain) {
         sessionFactory.getCurrentSession().save(domain);
     }
-    
+
     public void update(T domain) {
-        sessionFactory.getCurrentSession().update(domain);        
+        sessionFactory.getCurrentSession().update(domain);
     }
 
     public void merge(T domain) {
@@ -40,15 +41,17 @@ public class BaseDao<T> {
     }
 
     public void delete(T domain) {
-       sessionFactory.getCurrentSession().delete(domain);
+        sessionFactory.getCurrentSession().delete(domain);
     }
-    
-    public T getFromCode(String c){
-        return (T) sessionFactory.getCurrentSession().getNamedQuery(domainClass.getSimpleName()+".findByCode")
+
+    @SuppressWarnings("unchecked")
+    public T getFromCode(String c) {
+        return (T) sessionFactory.getCurrentSession().getNamedQuery(domainClass.getSimpleName() + ".findByCode")
                 .setParameter("code", c).uniqueResult();
     }
 
+    @SuppressWarnings("unchecked")
     public List<T> getAll() {
         return sessionFactory.getCurrentSession().createQuery("FROM " + domainClass.getName()).list();
-    }    
+    }
 }
