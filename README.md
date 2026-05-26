@@ -19,19 +19,19 @@ A Java-based local electronic voting system built with Spring Framework, designe
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Language | Java 17 |
-| Framework | Spring Framework 4 (Core, MVC, TX) |
-| UI | Java Swing (NetBeans Form Designer) |
-| ORM | Hibernate 4 |
-| Database | MySQL / MariaDB (via XAMPP/phpMyAdmin) |
-| Build Tool | Maven |
-| QR Code | ZXing |
-| Webcam | Sarxos Webcam Capture |
-| PDF | Apache PDFBox |
-| Charts | XChart |
-| FTP | Apache Commons Net |
+| Layer      | Technology                             |
+| ---------- | -------------------------------------- |
+| Language   | Java 17                                |
+| Framework  | Spring Framework 4 (Core, MVC, TX)     |
+| UI         | Java Swing (NetBeans Form Designer)    |
+| ORM        | Hibernate 4                            |
+| Database   | MySQL / MariaDB (via XAMPP/phpMyAdmin) |
+| Build Tool | Maven                                  |
+| QR Code    | ZXing                                  |
+| Webcam     | Sarxos Webcam Capture                  |
+| PDF        | Apache PDFBox                          |
+| Charts     | XChart                                 |
+| FTP        | Apache Commons Net                     |
 
 ---
 
@@ -118,12 +118,12 @@ On first launch, a dialog lets you choose between `Localhost` (server mode) or e
 
 ## User Roles
 
-| Role | Access |
-|---|---|
+| Role                | Access                                                          |
+| ------------------- | --------------------------------------------------------------- |
 | Super Administrator | Full access: manage voters, candidates, polling stations, staff |
-| Registrator | Voter check-in and queue management |
-| Operator | Runs the ballot interface for voters to cast votes |
-| Auditor | Read-only access to results and logs |
+| Registrator         | Voter check-in and queue management                             |
+| Operator            | Runs the ballot interface for voters to cast votes              |
+| Auditor             | Read-only access to results and logs                            |
 
 ---
 
@@ -157,7 +157,7 @@ libs/
 
 ## Roadmap
 
-- [ ] Fix `Bundle.properties` loading (replace `NbBundle` with standard `ResourceBundle`)
+- [x] Fix `Bundle.properties` loading (replace `NbBundle` with standard `ResourceBundle`)
 - [ ] Migrate to **Spring Boot**
 - [ ] Replace MySQL with an embedded database (**SQLite** or **H2**) for simpler deployment
 - [ ] Replace NetBeans Form Designer UI with standard Swing or migrate to **JavaFX**
