@@ -9,7 +9,8 @@
       "name": "MainUi",
       "request": "launch",
       "mainClass": "com.voting.ui.frame.MainUi",
-      "projectName": "local-evoting"
+      "projectName": "local-evoting",
+      "vmArgs": "--add-opens java.base/java.lang=ALL-UNNAMED"
     }
   ]
 }

@@ -3,12 +3,12 @@
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost/voting</property>
-    <property name="hibernate.connection.username">dbase</property>
-    <property name="hibernate.connection.password">root</property>
-    <property name="hibernate.show_sql">true</property>
-    <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="hibernate.connection.driver_class">${jdbc.driver}</property>
+    <property name="hibernate.connection.url">jdbc:mysql://${jdbc.ip}/${jdbc.dbase}</property>
+    <property name="hibernate.connection.username">${jdbc.username}</property>
+    <property name="hibernate.connection.password">${jdbc.password}</property>
+    <property name="hibernate.show_sql">false</property>
+    <property name="hibernate.hbm2ddl.auto">validate</property>
     <property name="hibernate.format_sql">true</property>
     <mapping class="com.voting.model.master.Calon"/>
     <mapping class="com.voting.model.master.Pemilih"/>
